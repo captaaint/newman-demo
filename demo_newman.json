@@ -48,13 +48,12 @@
 					"raw": "{\r\n    \"requestid\": \"{{$guid}}\",\r\n    \"transactionid\": \"{{$guid}}\"\r\n}"
 				},
 				"url": {
-					"raw": "http://kong-proxy.devkong:80/dev/public/api/v1/auth/anonymus/acquire/token",
+					"raw": "http://kong-proxy.devkong/dev/public/api/v1/auth/anonymus/acquire/token",
 					"protocol": "http",
 					"host": [
 						"kong-proxy",
 						"devkong"
 					],
-					"port": "80",
 					"path": [
 						"dev",
 						"public",
