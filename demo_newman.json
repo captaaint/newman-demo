@@ -8,7 +8,7 @@
 		{
 			"name": "https://jsonplaceholder.typicode.com/posts/1",
 			"request": {
-				"method": "GET",
+				"method": "POST",
 				"header": [],
 				"url": {
 					"raw": "https://jsonplaceholder.typicode.com/posts/1",
@@ -21,6 +21,88 @@
 					"path": [
 						"posts",
 						"1"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "anonymusToken",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"response should be okay to process\", function () {\r",
+							"    pm.response.to.not.be.error;\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"the status_code should be 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"response should contain an access_token\", function () {\r",
+							"    const jsonData = pm.response.json();\r",
+							"    pm.expect(jsonData).to.have.property('access_token');\r",
+							"});\r",
+							"\r",
+							"pm.test(\"response should contain a refresh_token\", function () {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.refresh_token).not.to.be.null;\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"auth": {
+					"type": "noauth"
+				},
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					},
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					},
+					{
+						"key": "",
+						"value": "",
+						"type": "text",
+						"disabled": true
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"requestid\": \"{{$guid}}\",\r\n    \"transactionid\": \"{{$guid}}\"\r\n}"
+				},
+				"url": {
+					"raw": "http://kong-ingress.devkong:8000/dev/public/api/v1/auth/anonymus/acquire/token",
+					"protocol": "http",
+					"host": [
+						"kong-ingress",
+						"devkong"
+					],
+					"port": "8000",
+					"path": [
+						"dev",
+						"public",
+						"api",
+						"v1",
+						"auth",
+						"anonymus",
+						"acquire",
+						"token"
 					]
 				}
 			},
