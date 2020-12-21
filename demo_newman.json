@@ -87,10 +87,10 @@
 					"raw": "{\r\n    \"requestid\": \"{{$guid}}\",\r\n    \"transactionid\": \"{{$guid}}\"\r\n}"
 				},
 				"url": {
-					"raw": "http://kong-ingress.devkong:8000/dev/public/api/v1/auth/anonymus/acquire/token",
+					"raw": "http://ingress-kong.devkong:8000/dev/public/api/v1/auth/anonymus/acquire/token",
 					"protocol": "http",
 					"host": [
-						"kong-ingress",
+						"ingress-kong",
 						"devkong"
 					],
 					"port": "8000",
