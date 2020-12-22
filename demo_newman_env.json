@@ -41,9 +41,24 @@
 			"key": "testUserSessionId",
 			"value": "",
 			"enabled": true
+		},
+		{
+			"key": "wrongClientAnonymusTokenUrl",
+			"value": "http://keycloak-svc.keycloak-dev/auth/realms/takarek-poc/protocol/openid-connect/token",
+			"enabled": true
+		},
+		{
+			"key": "wrongClient",
+			"value": "wrong_client",
+			"enabled": true
+		},
+		{
+			"key": "wrongClientSecret",
+			"value": "5054c1d3-af56-4324-9061-b43dafee29c9",
+			"enabled": true
 		}
 	],
 	"_postman_variable_scope": "environment",
-	"_postman_exported_at": "2020-12-22T19:33:28.608Z",
+	"_postman_exported_at": "2020-12-22T21:13:42.886Z",
 	"_postman_exported_using": "Postman/7.36.1"
 }

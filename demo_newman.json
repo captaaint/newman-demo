@@ -1463,17 +1463,17 @@
 								{
 									"key": "idcard",
 									"type": "file",
-									"src": "./test.jpg"
+									"src": "./IdCard.jpg"
 								},
 								{
 									"key": "selfiephoto",
 									"type": "file",
-									"src": "./test.jpg"
+									"src": "./Selfie.jpg"
 								},
 								{
 									"key": "addresscard",
 									"type": "file",
-									"src": "./test.jpg"
+									"src": "AddressCard.jpg"
 								}
 							]
 						},
@@ -1708,72 +1708,1216 @@
 						"description": "http://api.ftxapigw.fintechblocks.com:8000/mock/secured/api/v1/card/1234596654"
 					},
 					"response": []
+				},
+				{
+					"name": "getAccounts",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"response should be okay to process\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"the status_code should be 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"response should have a body with an empty object\", function () {\r",
+									"    pm.response.to.have.body({});\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{userAccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://api.ftxapigw.fintechblocks.com:8000/dev/secured/api/v1/customer/1234596654/accounts",
+							"protocol": "http",
+							"host": [
+								"api",
+								"ftxapigw",
+								"fintechblocks",
+								"com"
+							],
+							"port": "8000",
+							"path": [
+								"dev",
+								"secured",
+								"api",
+								"v1",
+								"customer",
+								"1234596654",
+								"accounts"
+							]
+						}
+					},
+					"response": []
 				}
 			]
 		},
 		{
-			"name": "anonymusToken - correlation-id in response",
-			"event": [
+			"name": "Error",
+			"item": [
 				{
-					"listen": "test",
-					"script": {
-						"exec": [
-							"pm.test(\"response should be okay to process\", function () {\r",
-							"    pm.response.to.not.be.error;\r",
-							"    pm.response.to.be.withBody;\r",
-							"    pm.response.to.be.json;\r",
-							"});\r",
-							"\r",
-							"pm.test(\"the status_code should be 200\", function () {\r",
-							"    pm.response.to.have.status(200);\r",
-							"});\r",
-							"\r",
-							"pm.test(\"x-correlation-id header is present\", () => {\r",
-							"  pm.response.to.have.header(\"x-correlation-id\");\r",
-							"});\r",
-							"\r",
-							"\r",
-							"\r",
-							""
-						],
-						"type": "text/javascript"
-					}
-				}
-			],
-			"request": {
-				"auth": {
-					"type": "noauth"
+					"name": "anonymusToken",
+					"item": [
+						{
+							"name": "anonymusToken - empty request body",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"response should be error to process\", function () {\r",
+											"    pm.response.to.be.error;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"the status_code should be 401\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"response body should have message property with 'Error in policy evaluation: request_validator. Error description: Denied by policy: Request schema validation failed for POST /dev/public/api/v1/auth/anonymus/acquire/token' value\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Error in policy evaluation: request_validator. Error description: Denied by policy: Request schema validation failed for POST /dev/public/api/v1/auth/anonymus/acquire/token\");;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "",
+										"value": "",
+										"type": "text",
+										"disabled": true
+									}
+								],
+								"url": {
+									"raw": "{{base_url}}/dev/public/api/v1/auth/anonymus/acquire/token",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"dev",
+										"public",
+										"api",
+										"v1",
+										"auth",
+										"anonymus",
+										"acquire",
+										"token"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "anonymusToken - request body with empty object",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"response should be error to process\", function () {\r",
+											"    pm.response.to.be.error;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"the status_code should be 401\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"response body should have message property with 'Error in policy evaluation: request_validator. Error description: Denied by policy: Request schema validation failed for POST /dev/public/api/v1/auth/anonymus/acquire/token' value\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Error in policy evaluation: request_validator. Error description: Denied by policy: Request schema validation failed for POST /dev/public/api/v1/auth/anonymus/acquire/token\");;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": "application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{}"
+								},
+								"url": {
+									"raw": "{{base_url}}/dev/public/api/v1/auth/anonymus/acquire/token",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"dev",
+										"public",
+										"api",
+										"v1",
+										"auth",
+										"anonymus",
+										"acquire",
+										"token"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "anonymusToken - request body only with requestid",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"response should be error to process\", function () {\r",
+											"    pm.response.to.be.error;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"the status_code should be 401\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"response body should have message property with 'Error in policy evaluation: request_validator. Error description: Denied by policy: Request schema validation failed for POST /dev/public/api/v1/auth/anonymus/acquire/token' value\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Error in policy evaluation: request_validator. Error description: Denied by policy: Request schema validation failed for POST /dev/public/api/v1/auth/anonymus/acquire/token\");;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"requestid\": \"{{$guid}}\"\r\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/dev/public/api/v1/auth/anonymus/acquire/token",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"dev",
+										"public",
+										"api",
+										"v1",
+										"auth",
+										"anonymus",
+										"acquire",
+										"token"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "anonymusToken - request body only with transactionid",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"response should be error to process\", function () {\r",
+											"    pm.response.to.be.error;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"the status_code should be 401\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"response body should have message property with 'Error in policy evaluation: request_validator. Error description: Denied by policy: Request schema validation failed for POST /dev/public/api/v1/auth/anonymus/acquire/token' value\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Error in policy evaluation: request_validator. Error description: Denied by policy: Request schema validation failed for POST /dev/public/api/v1/auth/anonymus/acquire/token\");;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n     \"transactionid\": \"{{$guid}}\"\r\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/dev/public/api/v1/auth/anonymus/acquire/token",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"dev",
+										"public",
+										"api",
+										"v1",
+										"auth",
+										"anonymus",
+										"acquire",
+										"token"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				},
-				"method": "POST",
-				"header": [
-					{
-						"key": "Content-Type",
-						"type": "text",
-						"value": "application/json"
-					}
-				],
-				"body": {
-					"mode": "raw",
-					"raw": "{\r\n    \"requestid\": \"{{$guid}}\",\r\n    \"transactionid\": \"{{$guid}}\"\r\n}"
+				{
+					"name": "registration",
+					"item": [
+						{
+							"name": "registration - invalid token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"response should be error to process\", function () {\r",
+											"    pm.response.to.be.error;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"the status_code should be 403 Forbidden\", function () {\r",
+											"    pm.response.to.have.status(403);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"response body should have message property\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property('message');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"response body should have message property with 'Invalid token.' value\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Invalid token.\");;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "Invalid token",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": " application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"test@test.hu\",\r\n    \"password\": \"otp\",\r\n    \"mobile\": \"mobile_attribute\"\r\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/dev/public/api/v1/auth/registration/init",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"dev",
+										"public",
+										"api",
+										"v1",
+										"auth",
+										"registration",
+										"init"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "registration - wrong_client",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"// After creating a new client in keycloak and generating an access_token with it\r",
+											"\r",
+											"pm.test(\"response should be error to process\", function () {\r",
+											"    pm.response.to.be.error;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"the status_code should be 401 Forbidden\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"response body should have message property\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property('message');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"response body should have message property with 'Error in policy evaluation: check_client. Error description: ClientId not allowed: wrong_client' value\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Error in policy evaluation: check_client. Error description: ClientId not allowed: wrong_client\");;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"pm.sendRequest({\r",
+											"    url: pm.environment.get('wrongClientAnonymusTokenUrl'),\r",
+											"    method: 'POST',\r",
+											"    header: {\r",
+											"        'Content-Type': 'application/json'\r",
+											"    },\r",
+											"    body: {\r",
+											"        mode: 'urlencoded',\r",
+											"        urlencoded: [\r",
+											"            {key: 'client_id', value: pm.environment.get('wrongClient'), disabled: false},\r",
+											"            {key: 'client_secret', value: pm.environment.get('wrongClientSecret'), disabled: false},\r",
+											"            {key: 'grant_type', value:\"client_credentials\", disabled: false}\r",
+											"        ]\r",
+											"    }\r",
+											"}, function (err, res) {\r",
+											"    pm.environment.set('anonymusAccessToken', res.json().access_token);\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{anonymusAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"value": " application/json",
+										"type": "text"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"{{testUser}}\",\r\n    \"password\": \"{{testUserPassword}}\",\r\n    \"mobile\": \"mobile_attribute\"\r\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/dev/public/api/v1/auth/registration/init",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"dev",
+										"public",
+										"api",
+										"v1",
+										"auth",
+										"registration",
+										"init"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "registration - user already exists",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"response should be error to process\", function () {\r",
+											"    pm.response.to.be.error;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"the status_code should be 400 Forbidden\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"response body should have message property\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property('message');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"response body should have message property with errorMessage\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.have.property('errorMessage');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"response body should have errorMessage with 'User exists with same username' value\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message.errorMessage).to.eql(\"User exists with same username\");\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const anonymusTokenUrl = pm.variables.get('base_url') + '/dev/public/api/v1/auth/anonymus/acquire/token';\r",
+											"pm.sendRequest({\r",
+											"    url: anonymusTokenUrl,\r",
+											"    method: 'POST',\r",
+											"    header: {\r",
+											"        'Content-Type': 'application/json'\r",
+											"    },\r",
+											"    body: {\r",
+											"        mode: 'raw',\r",
+											"        raw: JSON.stringify({\r",
+											"            \"requestid\": \"{{$guid}}\",\r",
+											"            \"transactionid\": \"{{$guid}}\"\r",
+											"        })\r",
+											"    }\r",
+											"}, function (err, res) {\r",
+											"    pm.environment.set('anonymusAccessToken', res.json().access_token);\r",
+											"    pm.environment.set('anonymusRefreshToken', res.json().refresh_token)\r",
+											"});"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{anonymusAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": " application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"{{testUser}}\",\r\n    \"password\": \"{{testUserPassword}}\",\r\n    \"mobile\": \"mobile_attribute\"\r\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/dev/public/api/v1/auth/registration/init",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"dev",
+										"public",
+										"api",
+										"v1",
+										"auth",
+										"registration",
+										"init"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "registration - invalid x-scopes",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"//After deleting the email scope from backend_app client in keycloak\r",
+											"\r",
+											"pm.test(\"response should be error to process\", function () {\r",
+											"    pm.response.to.be.error;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"the status_code should be 401 Forbidden\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"response body should have message property\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property('message');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"response body should have message property with 'Error in policy evaluation: check_scope. Error description: Scope or combination of scopes not allowed: profile' value\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Error in policy evaluation: check_scope. Error description: Scope or combination of scopes not allowed: profile\");;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								},
+								{
+									"listen": "prerequest",
+									"script": {
+										"exec": [
+											"const uuid = require('uuid');\r",
+											"pm.environment.set('testUser', uuid.v4() + '@test.hu');"
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{anonymusAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": " application/json"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"{{testUser}}\",\r\n    \"password\": \"{{testUserPassword}}\",\r\n    \"mobile\": \"mobile_attribute\"\r\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/dev/public/api/v1/auth/registration/init",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"dev",
+										"public",
+										"api",
+										"v1",
+										"auth",
+										"registration",
+										"init"
+									]
+								}
+							},
+							"response": []
+						}
+					]
 				},
-				"url": {
-					"raw": "{{base_url}}/dev/public/api/v1/auth/anonymus/acquire/token",
-					"host": [
-						"{{base_url}}"
-					],
-					"path": [
-						"dev",
-						"public",
-						"api",
-						"v1",
-						"auth",
-						"anonymus",
-						"acquire",
-						"token"
+				{
+					"name": "user/sign/cert",
+					"item": [
+						{
+							"name": "user/sign/cert - invalid request body",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"response should be error to process\", function () {\r",
+											"    pm.response.to.be.error;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"the status_code should be 401\", function () {\r",
+											"    pm.response.to.have.status(401);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"response body should have message property\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property('message');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"response body should have message property with 'Error in policy evaluation: check_scope. Error description: Scope or combination of scopes not allowed: profile,email' value\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Error in policy evaluation: check_scope. Error description: Scope or combination of scopes not allowed: profile,email\");;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{anonymusAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "x-scopes",
+										"type": "text",
+										"value": "email, profile, openid",
+										"disabled": true
+									},
+									{
+										"key": "x-client-id",
+										"type": "text",
+										"value": "backend_app",
+										"disabled": true
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\"csr\": \"csr_attribute\"\r\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/dev/public/api/v1/auth/user/sign/cert",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"dev",
+										"public",
+										"api",
+										"v1",
+										"auth",
+										"user",
+										"sign",
+										"cert"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "user/sign/cert - invalid request header",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"pm.test(\"response should be error to process\", function () {\r",
+											"    pm.response.to.be.error;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"the status_code should be 400\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"response body should have message property\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property('message');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"response body should have message property with 'Must not send header x-client-id' value\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Must not send header x-client-id\");;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{anonymusAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [
+									{
+										"key": "Content-Type",
+										"type": "text",
+										"value": "application/json"
+									},
+									{
+										"key": "x-scopes",
+										"type": "text",
+										"value": "email, profile, openid",
+										"disabled": true
+									},
+									{
+										"key": "x-client-id",
+										"type": "text",
+										"value": "backend_app"
+									}
+								],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n\"csr\": \"csr_attribute\"\r\n}"
+								},
+								"url": {
+									"raw": "{{base_url}}/dev/public/api/v1/auth/user/sign/cert",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"dev",
+										"public",
+										"api",
+										"v1",
+										"auth",
+										"user",
+										"sign",
+										"cert"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "postToken",
+					"item": [
+						{
+							"name": "Invalid refresh_token",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"//After deleting the email scope from backend_app client in keycloak\r",
+											"\r",
+											"pm.test(\"response should be error to process\", function () {\r",
+											"    pm.response.to.be.error;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"the status_code should be 400 Bad Request\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"response body should have message property\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property('message');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"response body should have message.error property with 'invalid_grant' value\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message.error).to.eql(\"invalid_grant\");;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"response body should have message.error_description property with 'Invalid refresh token' value\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message.error_description).to.eql(\"Invalid refresh token\");;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{anonymusAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\"refresh_token\": \"Invalid refres_token\"}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/dev/secured/api/v1/auth/user/token",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"dev",
+										"secured",
+										"api",
+										"v1",
+										"auth",
+										"user",
+										"token"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Invalid email",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"//After deleting the email scope from backend_app client in keycloak\r",
+											"\r",
+											"pm.test(\"response should be error to process\", function () {\r",
+											"    pm.response.to.be.error;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"the status_code should be 400 Bad Request\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"response body should have message property\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property('message');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"response body should have message.error property with 'invalid_grant' value\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message.error).to.eql(\"invalid_grant\");;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"response body should have message.error_description property with 'Invalid user credentials' value\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message.error_description).to.eql(\"Invalid user credentials\");;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{anonymusAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"Invalid email\",\r\n    \"password\": \"{{testUserPassword}}\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/dev/secured/api/v1/auth/user/token",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"dev",
+										"secured",
+										"api",
+										"v1",
+										"auth",
+										"user",
+										"token"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Invalid password",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"//After deleting the email scope from backend_app client in keycloak\r",
+											"\r",
+											"pm.test(\"response should be error to process\", function () {\r",
+											"    pm.response.to.be.error;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"the status_code should be 400 Bad Request\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"response body should have message property\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property('message');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"response body should have message.error property with 'invalid_grant' value\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message.error).to.eql(\"invalid_grant\");;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"response body should have message.error_description property with 'Invalid user credentials' value\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message.error_description).to.eql(\"Invalid user credentials\");;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{anonymusAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"{{testUser}}\",\r\n    \"password\": \"Invalid password\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/dev/secured/api/v1/auth/user/token",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"dev",
+										"secured",
+										"api",
+										"v1",
+										"auth",
+										"user",
+										"token"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Empty object in request body",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"//After deleting the email scope from backend_app client in keycloak\r",
+											"\r",
+											"pm.test(\"response should be error to process\", function () {\r",
+											"    pm.response.to.be.error;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"the status_code should be 400 Bad Request\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"response body should have message property\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property('message');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"response body should have message.error property with 'invalid_grant' value\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message.error).to.eql(\"invalid_grant\");;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"response body should have message.error_description property with 'Invalid user credentials' value\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message.error_description).to.eql(\"Invalid user credentials\");;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{anonymusAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "{{base_url}}/dev/secured/api/v1/auth/user/token",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"dev",
+										"secured",
+										"api",
+										"v1",
+										"auth",
+										"user",
+										"token"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Empty request body",
+							"event": [
+								{
+									"listen": "test",
+									"script": {
+										"exec": [
+											"//After deleting the email scope from backend_app client in keycloak\r",
+											"\r",
+											"pm.test(\"response should be error to process\", function () {\r",
+											"    pm.response.to.be.error;\r",
+											"});\r",
+											"\r",
+											"pm.test(\"the status_code should be 400 Bad Request\", function () {\r",
+											"    pm.response.to.have.status(400);\r",
+											"});\r",
+											"\r",
+											"pm.test(\"response body should have message property\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData).to.have.property('message');\r",
+											"});\r",
+											"\r",
+											"pm.test(\"response body should have message property with 'Validation errors' value\", function () {\r",
+											"    const jsonData = pm.response.json();\r",
+											"    pm.expect(jsonData.message).to.eql(\"Validation errors\");;\r",
+											"});\r",
+											""
+										],
+										"type": "text/javascript"
+									}
+								}
+							],
+							"request": {
+								"auth": {
+									"type": "bearer",
+									"bearer": [
+										{
+											"key": "token",
+											"value": "{{anonymusAccessToken}}",
+											"type": "string"
+										}
+									]
+								},
+								"method": "POST",
+								"header": [],
+								"url": {
+									"raw": "{{base_url}}/dev/secured/api/v1/auth/user/token",
+									"host": [
+										"{{base_url}}"
+									],
+									"path": [
+										"dev",
+										"secured",
+										"api",
+										"v1",
+										"auth",
+										"user",
+										"token"
+									]
+								}
+							},
+							"response": []
+						}
 					]
 				}
-			},
-			"response": []
+			]
 		}
 	],
 	"event": [
@@ -1791,6 +2935,29 @@
 			"script": {
 				"type": "text/javascript",
 				"exec": [
+					"pm.test(\"x-correlation-id header is present\", () => {",
+					"  pm.response.to.have.header(\"x-correlation-id\");",
+					"});",
+					"",
+					"pm.test(\"ratelimit-reset header is present\", () => {",
+					"  pm.response.to.have.header(\"ratelimit-reset\");",
+					"});",
+					"",
+					"pm.test(\"ratelimit-remaining header is present\", () => {",
+					"  pm.response.to.have.header(\"ratelimit-remaining\");",
+					"});",
+					"",
+					"pm.test(\"ratelimit-limit header is present\", () => {",
+					"  pm.response.to.have.header(\"ratelimit-limit\");",
+					"});",
+					"",
+					"pm.test(\"x-ratelimit-remaining-hour header is present\", () => {",
+					"  pm.response.to.have.header(\"x-ratelimit-remaining-hour\");",
+					"});",
+					"",
+					"pm.test(\"x-ratelimit-limit-hour header is present\", () => {",
+					"  pm.response.to.have.header(\"x-ratelimit-limit-hour\");",
+					"});",
 					""
 				]
 			}
