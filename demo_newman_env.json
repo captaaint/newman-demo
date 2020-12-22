@@ -1,0 +1,24 @@
+{
+	"id": "9c8803e1-912e-4507-9e19-ce4f9bfff1da",
+	"name": "Test",
+	"values": [
+		{
+			"key": "anonymusAccessToken",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "userAccessToken",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "base_url",
+			"value": "http://kong-proxy.devkong",
+			"enabled": true
+		}
+	],
+	"_postman_variable_scope": "environment",
+	"_postman_exported_at": "2020-12-22T16:22:46.030Z",
+	"_postman_exported_using": "Postman/7.36.1"
+}

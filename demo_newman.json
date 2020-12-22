@@ -69,11 +69,9 @@
 							"raw": "{\r\n    \"requestid\": \"{{$guid}}\",\r\n    \"transactionid\": \"{{$guid}}\"\r\n}"
 						},
 						"url": {
-							"raw": "http://kong-proxy.devkong/dev/public/api/v1/auth/anonymus/acquire/token",
-							"protocol": "http",
+							"raw": "{{base_url}}/dev/public/api/v1/auth/anonymus/acquire/token",
 							"host": [
-								"kong-proxy",
-								"devkong"
+								"{{base_url}}"
 							],
 							"path": [
 								"dev",
@@ -117,8 +115,9 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
+									"const anonymusTokenUrl = pm.variables.get('base_url') + '/dev/public/api/v1/auth/anonymus/acquire/token';\r",
 									"pm.sendRequest({\r",
-									"    url: 'http://kong-proxy.devkong/dev/public/api/v1/auth/anonymus/acquire/token',\r",
+									"    url: anonymusTokenUrl,\r",
 									"    method: 'POST',\r",
 									"    header: {\r",
 									"        'Content-Type': 'application/json'\r",
@@ -162,11 +161,9 @@
 							"raw": "{\r\n    \"email\": \"test@test.hu\",\r\n    \"password\": \"otp\",\r\n    \"mobile\": \"mobile_attribute\"\r\n}"
 						},
 						"url": {
-							"raw": "http://kong-proxy.devkong/dev/public/api/v1/auth/registration/init",
-							"protocol": "http",
+							"raw": "{{base_url}}/dev/public/api/v1/auth/registration/init",
 							"host": [
-								"kong-proxy",
-								"devkong"
+								"{{base_url}}"
 							],
 							"path": [
 								"dev",
@@ -231,11 +228,9 @@
 							"raw": " {\r\n     \"email\": \"test@test.hu\"\r\n }"
 						},
 						"url": {
-							"raw": "http://kong-proxy.devkong/dev/public/api/v1/auth/validate/email/121332",
-							"protocol": "http",
+							"raw": "{{base_url}}/dev/public/api/v1/auth/validate/email/121332",
 							"host": [
-								"kong-proxy",
-								"devkong"
+								"{{base_url}}"
 							],
 							"path": [
 								"dev",
@@ -301,11 +296,9 @@
 							"raw": "{\r\n    \"otp\": \"SMS\"\r\n}"
 						},
 						"url": {
-							"raw": "http://kong-proxy.devkong/dev/public/api/v1/auth/registration/otp",
-							"protocol": "http",
+							"raw": "{{base_url}}/dev/public/api/v1/auth/registration/otp",
 							"host": [
-								"kong-proxy",
-								"devkong"
+								"{{base_url}}"
 							],
 							"path": [
 								"dev",
@@ -356,11 +349,9 @@
 							}
 						],
 						"url": {
-							"raw": "http://kong-proxy.devkong/dev/public/api/v1/auth/user/token",
-							"protocol": "http",
+							"raw": "{{base_url}}/dev/public/api/v1/auth/user/token",
 							"host": [
-								"kong-proxy",
-								"devkong"
+								"{{base_url}}"
 							],
 							"path": [
 								"dev",
@@ -451,11 +442,9 @@
 							"raw": "{\r\n    \"email\": \"test@test.hu\",\r\n    \"password\": \"otp\"\r\n}"
 						},
 						"url": {
-							"raw": "http://kong-proxy.devkong/dev/secured/api/v1/auth/user/token",
-							"protocol": "http",
+							"raw": "{{base_url}}/dev/secured/api/v1/auth/user/token",
 							"host": [
-								"kong-proxy",
-								"devkong"
+								"{{base_url}}"
 							],
 							"path": [
 								"dev",
@@ -543,11 +532,9 @@
 							"raw": "{\r\n\"refresh_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJmNjc3M2UwOS1mZTBiLTQzY2MtOTBiZC1hODg1MjNlMGM4ZGQifQ.eyJleHAiOjE2MDgyNzg5MTgsImlhdCI6MTYwODI3NzExOCwianRpIjoiYzEzMTJiMmUtYzE1OC00YmFiLWE1NTQtNDFhYmNmYzZkMTJkIiwiaXNzIjoiaHR0cHM6Ly9hdXRoLnRha2FyZWsuZ3cuaW8vYXV0aC9yZWFsbXMvdGFrYXJlay1wb2MiLCJhdWQiOiJodHRwczovL2F1dGgudGFrYXJlay5ndy5pby9hdXRoL3JlYWxtcy90YWthcmVrLXBvYyIsInN1YiI6IjdlNmM2NjQ4LTRiOWMtNGYzNC1hMGFiLWE0ZjA2NjgwYzgxNCIsInR5cCI6IlJlZnJlc2giLCJhenAiOiJiYWNrZW5kX2FwcCIsInNlc3Npb25fc3RhdGUiOiI3ZmUzMzE3Yi1kM2Q3LTQ1NzQtOTgxNy0yZjYzMDFhNTUyN2EiLCJzY29wZSI6InByb2ZpbGUgZW1haWwifQ.zJy3Pp39GPw052hoS7OIZFl61aeWQOM1MjvFw7UafNs\"\r\n}"
 						},
 						"url": {
-							"raw": "http://kong-proxy.devkong/dev/secured/api/v1/auth/user/token",
-							"protocol": "http",
+							"raw": "{{base_url}}/dev/secured/api/v1/auth/user/token",
 							"host": [
-								"kong-proxy",
-								"devkong"
+								"{{base_url}}"
 							],
 							"path": [
 								"dev",
@@ -603,8 +590,9 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
+									"const userTokenUrl = pm.variables.get('base_url') + '/dev/secured/api/v1/auth/user/token';\r",
 									"pm.sendRequest({\r",
-									"    url: 'http://kong-proxy.devkong/dev/secured/api/v1/auth/user/token',\r",
+									"    url: userTokenUrl,\r",
 									"    method: 'POST',\r",
 									"    header: {\r",
 									"        'Content-Type': 'application/json'\r",
@@ -653,11 +641,9 @@
 							"raw": "{\r\n    \"uniqueid\": \"{{$guid}}\",\r\n    \"csr\": \"csr_attribute\"\r\n}"
 						},
 						"url": {
-							"raw": "http://kong-proxy.devkong/dev/public/api/v1/auth/user/sign/cert",
-							"protocol": "http",
+							"raw": "{{base_url}}/dev/public/api/v1/auth/user/sign/cert",
 							"host": [
-								"kong-proxy",
-								"devkong"
+								"{{base_url}}"
 							],
 							"path": [
 								"dev",
@@ -718,11 +704,9 @@
 							}
 						],
 						"url": {
-							"raw": "http://kong-proxy.devkong/dev/secured/api/v1/auth/user/sign/cert/success",
-							"protocol": "http",
+							"raw": "{{base_url}}/dev/secured/api/v1/auth/user/sign/cert/success",
 							"host": [
-								"kong-proxy",
-								"devkong"
+								"{{base_url}}"
 							],
 							"path": [
 								"dev",
@@ -794,11 +778,9 @@
 							"raw": "{\r\n\"csr\": \"csr_attribute\",\r\n\"uniqueid\": \"{{$guid}}\",\r\n\"serialNumber\": \"1 (0x1)\"\r\n}"
 						},
 						"url": {
-							"raw": "http://kong-proxy.devkong/dev/secured/api/v1/auth/user/renew/cert",
-							"protocol": "http",
+							"raw": "{{base_url}}/dev/secured/api/v1/auth/user/renew/cert",
 							"host": [
-								"kong-proxy",
-								"devkong"
+								"{{base_url}}"
 							],
 							"path": [
 								"dev",
@@ -863,11 +845,9 @@
 							"raw": "{\r\n\"expiredate\": \"1607350427\",\r\n\"serialnumber\": \"1 (0x1)\"\r\n}"
 						},
 						"url": {
-							"raw": "http://kong-proxy.devkong/dev/secured/api/v1/auth/user/renew/cert/success",
-							"protocol": "http",
+							"raw": "{{base_url}}/dev/secured/api/v1/auth/user/renew/cert/success",
 							"host": [
-								"kong-proxy",
-								"devkong"
+								"{{base_url}}"
 							],
 							"path": [
 								"dev",
@@ -945,11 +925,9 @@
 							"raw": "{\r\n\"otp\":\"otp\",\r\n\"email\":\"test@test.hu\",\r\n\"sessionid\": \"{{$guid}}\"\r\n}\r\n"
 						},
 						"url": {
-							"raw": "http://kong-proxy.devkong/dev/public/api/v1/auth/user/login/otp",
-							"protocol": "http",
+							"raw": "{{base_url}}/dev/public/api/v1/auth/user/login/otp",
 							"host": [
-								"kong-proxy",
-								"devkong"
+								"{{base_url}}"
 							],
 							"path": [
 								"dev",
@@ -1014,11 +992,9 @@
 							"raw": "{\r\n    \"email\": \"session@email.com\",\r\n    \"password\": \"session\",\r\n    \"mobile\": \"mobile_attribute\"\r\n}"
 						},
 						"url": {
-							"raw": "http://kong-proxy.devkong/dev/public/api/v1/auth/registration/init",
-							"protocol": "http",
+							"raw": "{{base_url}}/dev/public/api/v1/auth/registration/init",
 							"host": [
-								"kong-proxy",
-								"devkong"
+								"{{base_url}}"
 							],
 							"path": [
 								"dev",
@@ -1083,11 +1059,9 @@
 							"raw": "{\r\n\"email\": \"session@email.com\",\r\n\"password\": \"session\"\r\n}"
 						},
 						"url": {
-							"raw": "http://kong-proxy.devkong/dev/public/api/v1/auth/user/token",
-							"protocol": "http",
+							"raw": "{{base_url}}/dev/public/api/v1/auth/user/token",
 							"host": [
-								"kong-proxy",
-								"devkong"
+								"{{base_url}}"
 							],
 							"path": [
 								"dev",
@@ -1158,11 +1132,9 @@
 							"raw": "{\r\n    \"sessionid\": \"96516b16-3f81-4117-a1aa-8cfe14a5c933\"\r\n}"
 						},
 						"url": {
-							"raw": "http://kong-proxy.devkong/dev/secured/api/v1/auth/user/lock",
-							"protocol": "http",
+							"raw": "{{base_url}}/dev/secured/api/v1/auth/user/lock",
 							"host": [
-								"kong-proxy",
-								"devkong"
+								"{{base_url}}"
 							],
 							"path": [
 								"dev",
@@ -1226,11 +1198,9 @@
 							"raw": "{\r\n    \"sessionid\": \"fde38246-1cde-4c23-82fc-e1106498ed2f\"\r\n}"
 						},
 						"url": {
-							"raw": "http://kong-proxy.devkong/dev/secured/api/v1/auth/user/wipe",
-							"protocol": "http",
+							"raw": "{{base_url}}/dev/secured/api/v1/auth/user/wipe",
 							"host": [
-								"kong-proxy",
-								"devkong"
+								"{{base_url}}"
 							],
 							"path": [
 								"dev",
@@ -1294,11 +1264,9 @@
 							"raw": "{\r\n    \"regID\": \"12121\",\r\n    \"address\": \"fake address\"\r\n}"
 						},
 						"url": {
-							"raw": "http://kong-proxy.devkong/dev/secured/api/v1/auth/kyc/uploadUserDetails",
-							"protocol": "http",
+							"raw": "{{base_url}}/dev/secured/api/v1/auth/kyc/uploadUserDetails",
 							"host": [
-								"kong-proxy",
-								"devkong"
+								"{{base_url}}"
 							],
 							"path": [
 								"dev",
@@ -1378,11 +1346,9 @@
 							]
 						},
 						"url": {
-							"raw": "http://kong-proxy.devkong/dev/secured/api/v1/auth/kyc/uploadPhotos",
-							"protocol": "http",
+							"raw": "{{base_url}}/dev/secured/api/v1/auth/kyc/uploadPhotos",
 							"host": [
-								"kong-proxy",
-								"devkong"
+								"{{base_url}}"
 							],
 							"path": [
 								"dev",
@@ -1437,11 +1403,9 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://kong-proxy.devkong/dev/secured/api/v1/customer/1234596654/cards",
-							"protocol": "http",
+							"raw": "{{base_url}}/dev/secured/api/v1/customer/1234596654/cards",
 							"host": [
-								"kong-proxy",
-								"devkong"
+								"{{base_url}}"
 							],
 							"path": [
 								"dev",
@@ -1505,11 +1469,9 @@
 							"raw": "{\r\n    \"accountids\": [\"12345\", \"2332423\"]\r\n}"
 						},
 						"url": {
-							"raw": "http://kong-proxy.devkong/dev/secured/api/v1/accounts/details",
-							"protocol": "http",
+							"raw": "{{base_url}}/dev/secured/api/v1/accounts/details",
 							"host": [
-								"kong-proxy",
-								"devkong"
+								"{{base_url}}"
 							],
 							"path": [
 								"dev",
@@ -1562,11 +1524,9 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://kong-proxy.devkong/dev/secured/api/v1/card/1234596654",
-							"protocol": "http",
+							"raw": "{{base_url}}/dev/secured/api/v1/card/1234596654",
 							"host": [
-								"kong-proxy",
-								"devkong"
+								"{{base_url}}"
 							],
 							"path": [
 								"dev",
@@ -1629,11 +1589,9 @@
 					"raw": "{\r\n    \"requestid\": \"{{$guid}}\",\r\n    \"transactionid\": \"{{$guid}}\"\r\n}"
 				},
 				"url": {
-					"raw": "http://kong-proxy.devkong/dev/public/api/v1/auth/anonymus/acquire/token",
-					"protocol": "http",
+					"raw": "{{base_url}}/dev/public/api/v1/auth/anonymus/acquire/token",
 					"host": [
-						"kong-proxy",
-						"devkong"
+						"{{base_url}}"
 					],
 					"path": [
 						"dev",
