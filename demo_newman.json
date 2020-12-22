@@ -614,8 +614,8 @@
 									"    body: {\r",
 									"        mode: 'raw',\r",
 									"        raw: JSON.stringify({\r",
-									"            \"email\": \"test@test.hu\",\r",
-									"            \"password\": \"otp\"\r",
+									"            \"email\": pm.environment.get('testUser'),\r",
+									"            \"password\": pm.environment.get('testUserPassword')\r",
 									"        })\r",
 									"    }\r",
 									"}, function (err, res) {\r",
@@ -697,6 +697,33 @@
 								],
 								"type": "text/javascript"
 							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const userTokenUrl = pm.variables.get('base_url') + '/dev/secured/api/v1/auth/user/token';\r",
+									"const bearerToken = 'Bearer ' + pm.environment.get('anonymusAccessToken');\r",
+									"pm.sendRequest({\r",
+									"    url: userTokenUrl,\r",
+									"    method: 'POST',\r",
+									"    header: {\r",
+									"        'Content-Type': 'application/json',\r",
+									"        'Authorization': bearerToken\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify({\r",
+									"            \"email\": pm.environment.get('testUser'),\r",
+									"            \"password\": pm.environment.get('testUserPassword')\r",
+									"        })\r",
+									"    }\r",
+									"}, function (err, res) {\r",
+									"    pm.environment.set('userAccessToken', res.json().access_token)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
 						}
 					],
 					"request": {
@@ -718,6 +745,10 @@
 								"type": "text"
 							}
 						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"expiredate\": \"1607350427\",\r\n\"serialnumber\": \"1 (0x1)\"\r\n}"
+						},
 						"url": {
 							"raw": "{{base_url}}/dev/secured/api/v1/auth/user/sign/cert/success",
 							"host": [
@@ -767,6 +798,33 @@
 								],
 								"type": "text/javascript"
 							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const userTokenUrl = pm.variables.get('base_url') + '/dev/secured/api/v1/auth/user/token';\r",
+									"const bearerToken = 'Bearer ' + pm.environment.get('anonymusAccessToken');\r",
+									"pm.sendRequest({\r",
+									"    url: userTokenUrl,\r",
+									"    method: 'POST',\r",
+									"    header: {\r",
+									"        'Content-Type': 'application/json',\r",
+									"        'Authorization': bearerToken\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify({\r",
+									"            \"email\": pm.environment.get('testUser'),\r",
+									"            \"password\": pm.environment.get('testUserPassword')\r",
+									"        })\r",
+									"    }\r",
+									"}, function (err, res) {\r",
+									"    pm.environment.set('userAccessToken', res.json().access_token)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
 						}
 					],
 					"request": {
@@ -790,7 +848,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\"csr\": \"csr_attribute\",\r\n\"uniqueid\": \"{{$guid}}\",\r\n\"serialNumber\": \"1 (0x1)\"\r\n}"
+							"raw": "{\r\n\"csr\": \"csr_attribute\",\r\n\"uniqueid\": \"{{$guid}}\",\r\n\"serialnumber\": \"1 (0x1)\"\r\n}"
 						},
 						"url": {
 							"raw": "{{base_url}}/dev/secured/api/v1/auth/user/renew/cert",
@@ -830,6 +888,33 @@
 									"\r",
 									"pm.test(\"response should have a body with an empty object\", function () {\r",
 									"    pm.response.to.have.body({});\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const userTokenUrl = pm.variables.get('base_url') + '/dev/secured/api/v1/auth/user/token';\r",
+									"const bearerToken = 'Bearer ' + pm.environment.get('anonymusAccessToken');\r",
+									"pm.sendRequest({\r",
+									"    url: userTokenUrl,\r",
+									"    method: 'POST',\r",
+									"    header: {\r",
+									"        'Content-Type': 'application/json',\r",
+									"        'Authorization': bearerToken\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify({\r",
+									"            \"email\": pm.environment.get('testUser'),\r",
+									"            \"password\": pm.environment.get('testUserPassword')\r",
+									"        })\r",
+									"    }\r",
+									"}, function (err, res) {\r",
+									"    pm.environment.set('userAccessToken', res.json().access_token)\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -1209,7 +1294,7 @@
 									"    pm.response.to.have.status(200);\r",
 									"});\r",
 									"\r",
-									"pm.test(\"response should have a body with an empty object\", function () {\r",
+									"pm.test(\"response should have a body with notes\", function () {\r",
 									"    pm.response.to.have.body({\"notes\": \"Revoked x509 successfully\"});\r",
 									"});"
 								],
@@ -1309,6 +1394,33 @@
 								],
 								"type": "text/javascript"
 							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const userTokenUrl = pm.variables.get('base_url') + '/dev/secured/api/v1/auth/user/token';\r",
+									"const bearerToken = 'Bearer ' + pm.environment.get('anonymusAccessToken');\r",
+									"pm.sendRequest({\r",
+									"    url: userTokenUrl,\r",
+									"    method: 'POST',\r",
+									"    header: {\r",
+									"        'Content-Type': 'application/json',\r",
+									"        'Authorization': bearerToken\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify({\r",
+									"            \"email\": pm.environment.get('testUser'),\r",
+									"            \"password\": pm.environment.get('testUserPassword')\r",
+									"        })\r",
+									"    }\r",
+									"}, function (err, res) {\r",
+									"    pm.environment.set('userAccessToken', res.json().access_token)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
 						}
 					],
 					"request": {
@@ -1375,6 +1487,33 @@
 								],
 								"type": "text/javascript"
 							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const userTokenUrl = pm.variables.get('base_url') + '/dev/secured/api/v1/auth/user/token';\r",
+									"const bearerToken = 'Bearer ' + pm.environment.get('anonymusAccessToken');\r",
+									"pm.sendRequest({\r",
+									"    url: userTokenUrl,\r",
+									"    method: 'POST',\r",
+									"    header: {\r",
+									"        'Content-Type': 'application/json',\r",
+									"        'Authorization': bearerToken\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify({\r",
+									"            \"email\": pm.environment.get('testUser'),\r",
+									"            \"password\": pm.environment.get('testUserPassword')\r",
+									"        })\r",
+									"    }\r",
+									"}, function (err, res) {\r",
+									"    pm.environment.set('userAccessToken', res.json().access_token)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
 						}
 					],
 					"request": {
@@ -1402,17 +1541,17 @@
 								{
 									"key": "idcard",
 									"type": "file",
-									"src": "/C:/Users/Developer/Work/fintechX-api-gateway/helpers/postmanphotos/IdCard.JPG"
+									"src": "/C:/Users/kapit/Desktop/newman-demo/test.jpg"
 								},
 								{
 									"key": "selfiephoto",
 									"type": "file",
-									"src": "/C:/Users/Developer/Work/fintechX-api-gateway/helpers/postmanphotos/Selfie.JPG"
+									"src": "/C:/Users/kapit/Desktop/newman-demo/test.jpg"
 								},
 								{
 									"key": "addresscard",
 									"type": "file",
-									"src": "/C:/Users/Developer/Work/fintechX-api-gateway/helpers/postmanphotos/AddressCard.JPG"
+									"src": "/C:/Users/kapit/Desktop/newman-demo/test.jpg"
 								}
 							]
 						},
@@ -1455,6 +1594,15 @@
 									"pm.test(\"response should have a body with an empty object\", function () {\r",
 									"    pm.response.to.have.body({});\r",
 									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
 								],
 								"type": "text/javascript"
 							}
@@ -1510,6 +1658,33 @@
 									"\r",
 									"pm.test(\"response should have a body with an empty object\", function () {\r",
 									"    pm.response.to.have.body({});\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const userTokenUrl = pm.variables.get('base_url') + '/dev/secured/api/v1/auth/user/token';\r",
+									"const bearerToken = 'Bearer ' + pm.environment.get('anonymusAccessToken');\r",
+									"pm.sendRequest({\r",
+									"    url: userTokenUrl,\r",
+									"    method: 'POST',\r",
+									"    header: {\r",
+									"        'Content-Type': 'application/json',\r",
+									"        'Authorization': bearerToken\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify({\r",
+									"            \"email\": pm.environment.get('testUser'),\r",
+									"            \"password\": pm.environment.get('testUserPassword')\r",
+									"        })\r",
+									"    }\r",
+									"}, function (err, res) {\r",
+									"    pm.environment.set('userAccessToken', res.json().access_token)\r",
 									"});"
 								],
 								"type": "text/javascript"
