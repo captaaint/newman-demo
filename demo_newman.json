@@ -1753,7 +1753,6 @@
 							"host": [
 								"{{base_url}}"
 							],
-							"port": "8000",
 							"path": [
 								"dev",
 								"secured",
