@@ -115,6 +115,8 @@
 							"listen": "prerequest",
 							"script": {
 								"exec": [
+									"const uuid = require('uuid');\r",
+									"pm.environment.set('testUser', uuid.v4() + '@test.hu');\r",
 									"const anonymusTokenUrl = pm.variables.get('base_url') + '/dev/public/api/v1/auth/anonymus/acquire/token';\r",
 									"pm.sendRequest({\r",
 									"    url: anonymusTokenUrl,\r",
@@ -130,7 +132,8 @@
 									"        })\r",
 									"    }\r",
 									"}, function (err, res) {\r",
-									"    pm.environment.set('anonymusAccessToken', res.json().access_token)\r",
+									"    pm.environment.set('anonymusAccessToken', res.json().access_token);\r",
+									"    pm.environment.set('anonymusRefreshToken', res.json().refresh_token)\r",
 									"});"
 								],
 								"type": "text/javascript"
@@ -143,7 +146,7 @@
 							"bearer": [
 								{
 									"key": "token",
-									"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJmbjNIck81NHl1Z0V3Zy01X2VFbF9RQktxdGhaelZwNE91cXl1X2dzTzA0In0.eyJleHAiOjE2MDgyNzg0NDMsImlhdCI6MTYwODI3NjY0MywianRpIjoiZDBhM2FjM2MtYzk0NS00ZjhhLTg5MGMtMWM2ZGFmODQ0NzAxIiwiaXNzIjoiaHR0cHM6Ly9hdXRoLnRha2FyZWsuZ3cuaW8vYXV0aC9yZWFsbXMvdGFrYXJlay1wb2MiLCJhdWQiOiJhY2NvdW50Iiwic3ViIjoiN2U2YzY2NDgtNGI5Yy00ZjM0LWEwYWItYTRmMDY2ODBjODE0IiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiYmFja2VuZF9hcHAiLCJzZXNzaW9uX3N0YXRlIjoiZTY4NTVkYzQtOTZkOC00NWE1LTgwODItZDcyMGE3N2NjNjc1IiwiYWNyIjoiMSIsInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJwcm9maWxlIGVtYWlsIiwiY2xpZW50SG9zdCI6IjE3Mi4xOC4wLjgiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImNsaWVudElkIjoiYmFja2VuZF9hcHAiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJzZXJ2aWNlLWFjY291bnQtYmFja2VuZF9hcHAiLCJjbGllbnRBZGRyZXNzIjoiMTcyLjE4LjAuOCJ9.MD7dNJPn-srk6TRypgeXw77EgqEkwpLPRf5yRVUj3RKxpKy190IFAvem1Vg-zmhIsxX0rWwd0JSyW51rXmfAzgssZ6u-Mymmgm6EnPJv8nQKYinouDIvlAW0yq_FDWItJ1eSwr6ylQguNoKvSgNJXHD5N4xMBPc4q4VFGyB2FfkwLD6fKTYtEdhUETDK9rLAZne9oL0lWIT9C-eHXh9yNl7slsKFuYYBgByg53fvmKyTIzhYv-kPXXf_7Sjyi97jbjYTa0h7AbyX37efEFYemx96DDat4yiY7KhMvwd60pYDxcOpC67E1ZwXhBHk3PVsy2XrZ7p1-ngJUfq0CuUmtw",
+									"value": "{{anonymusAccessToken}}",
 									"type": "string"
 								}
 							]
@@ -158,7 +161,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"test@test.hu\",\r\n    \"password\": \"otp\",\r\n    \"mobile\": \"mobile_attribute\"\r\n}"
+							"raw": "{\r\n    \"email\": \"{{testUser}}\",\r\n    \"password\": \"{{testUserPassword}}\",\r\n    \"mobile\": \"mobile_attribute\"\r\n}"
 						},
 						"url": {
 							"raw": "{{base_url}}/dev/public/api/v1/auth/registration/init",
@@ -225,7 +228,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": " {\r\n     \"email\": \"test@test.hu\"\r\n }"
+							"raw": " {\r\n     \"email\": \"{{testUser}}\"\r\n }"
 						},
 						"url": {
 							"raw": "{{base_url}}/dev/public/api/v1/auth/validate/email/121332",
@@ -439,7 +442,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"email\": \"test@test.hu\",\r\n    \"password\": \"otp\"\r\n}"
+							"raw": "{\r\n    \"email\": \"{{testUser}}\",\r\n    \"password\": \"{{testUserPassword}}\"\r\n}"
 						},
 						"url": {
 							"raw": "{{base_url}}/dev/secured/api/v1/auth/user/token",
@@ -506,6 +509,15 @@
 								],
 								"type": "text/javascript"
 							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									""
+								],
+								"type": "text/javascript"
+							}
 						}
 					],
 					"request": {
@@ -529,7 +541,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n\"refresh_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJmNjc3M2UwOS1mZTBiLTQzY2MtOTBiZC1hODg1MjNlMGM4ZGQifQ.eyJleHAiOjE2MDgyNzg5MTgsImlhdCI6MTYwODI3NzExOCwianRpIjoiYzEzMTJiMmUtYzE1OC00YmFiLWE1NTQtNDFhYmNmYzZkMTJkIiwiaXNzIjoiaHR0cHM6Ly9hdXRoLnRha2FyZWsuZ3cuaW8vYXV0aC9yZWFsbXMvdGFrYXJlay1wb2MiLCJhdWQiOiJodHRwczovL2F1dGgudGFrYXJlay5ndy5pby9hdXRoL3JlYWxtcy90YWthcmVrLXBvYyIsInN1YiI6IjdlNmM2NjQ4LTRiOWMtNGYzNC1hMGFiLWE0ZjA2NjgwYzgxNCIsInR5cCI6IlJlZnJlc2giLCJhenAiOiJiYWNrZW5kX2FwcCIsInNlc3Npb25fc3RhdGUiOiI3ZmUzMzE3Yi1kM2Q3LTQ1NzQtOTgxNy0yZjYzMDFhNTUyN2EiLCJzY29wZSI6InByb2ZpbGUgZW1haWwifQ.zJy3Pp39GPw052hoS7OIZFl61aeWQOM1MjvFw7UafNs\"\r\n}"
+							"raw": "{\r\n\"refresh_token\": \"{{anonymusRefreshToken}}\"\r\n}"
 						},
 						"url": {
 							"raw": "{{base_url}}/dev/secured/api/v1/auth/user/token",
@@ -591,11 +603,13 @@
 							"script": {
 								"exec": [
 									"const userTokenUrl = pm.variables.get('base_url') + '/dev/secured/api/v1/auth/user/token';\r",
+									"const bearerToken = 'Bearer ' + pm.environment.get('anonymusAccessToken');\r",
 									"pm.sendRequest({\r",
 									"    url: userTokenUrl,\r",
 									"    method: 'POST',\r",
 									"    header: {\r",
-									"        'Content-Type': 'application/json'\r",
+									"        'Content-Type': 'application/json',\r",
+									"        'Authorization': bearerToken\r",
 									"    },\r",
 									"    body: {\r",
 									"        mode: 'raw',\r",
@@ -605,6 +619,7 @@
 									"        })\r",
 									"    }\r",
 									"}, function (err, res) {\r",
+									"    console.log(res);\r",
 									"    pm.environment.set('userAccessToken', res.json().access_token)\r",
 									"});"
 								],
@@ -1059,13 +1074,13 @@
 							"raw": "{\r\n\"email\": \"session@email.com\",\r\n\"password\": \"session\"\r\n}"
 						},
 						"url": {
-							"raw": "{{base_url}}/dev/public/api/v1/auth/user/token",
+							"raw": "{{base_url}}/dev/secured/api/v1/auth/user/token",
 							"host": [
 								"{{base_url}}"
 							],
 							"path": [
 								"dev",
-								"public",
+								"secured",
 								"api",
 								"v1",
 								"auth",
@@ -1106,6 +1121,34 @@
 								],
 								"type": "text/javascript"
 							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const postUserTokenUrl = pm.variables.get('base_url') + '/dev/secured/api/v1/auth/user/token';\r",
+									"const bearerToken = 'Bearer ' + pm.environment.get('anonymusAccessToken');\r",
+									"\r",
+									"pm.sendRequest({\r",
+									"    url: postUserTokenUrl,\r",
+									"    method: 'POST',\r",
+									"    header: {\r",
+									"        'Content-Type': 'application/json',\r",
+									"        'Authorization': bearerToken\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify({\r",
+									"            \"email\": \"session@email.com\",\r",
+									"            \"password\": \"session\"\r",
+									"        })\r",
+									"    }\r",
+									"}, function (err, res) {\r",
+									"    pm.environment.set('sessionId', res.json().session_id);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
 						}
 					],
 					"request": {
@@ -1129,7 +1172,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"sessionid\": \"96516b16-3f81-4117-a1aa-8cfe14a5c933\"\r\n}"
+							"raw": "{\r\n    \"sessionid\": \"{{sessionId}}\"\r\n}"
 						},
 						"url": {
 							"raw": "{{base_url}}/dev/secured/api/v1/auth/user/lock",
@@ -1172,6 +1215,34 @@
 								],
 								"type": "text/javascript"
 							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"const postUserTokenUrl = pm.variables.get('base_url') + '/dev/secured/api/v1/auth/user/token';\r",
+									"const bearerToken = 'Bearer ' + pm.environment.get('anonymusAccessToken');\r",
+									"\r",
+									"pm.sendRequest({\r",
+									"    url: postUserTokenUrl,\r",
+									"    method: 'POST',\r",
+									"    header: {\r",
+									"        'Content-Type': 'application/json',\r",
+									"        'Authorization': bearerToken\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify({\r",
+									"            \"email\": \"session@email.com\",\r",
+									"            \"password\": \"session\"\r",
+									"        })\r",
+									"    }\r",
+									"}, function (err, res) {\r",
+									"    pm.environment.set('sessionId', res.json().session_id);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
 						}
 					],
 					"request": {
@@ -1195,7 +1266,7 @@
 						],
 						"body": {
 							"mode": "raw",
-							"raw": "{\r\n    \"sessionid\": \"fde38246-1cde-4c23-82fc-e1106498ed2f\"\r\n}"
+							"raw": "{\r\n    \"sessionid\": \"{{sessionId}}\"\r\n}"
 						},
 						"url": {
 							"raw": "{{base_url}}/dev/secured/api/v1/auth/user/wipe",

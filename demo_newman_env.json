@@ -8,6 +8,11 @@
 			"enabled": true
 		},
 		{
+			"key": "anonymusRefreshToken",
+			"value": "",
+			"enabled": true
+		},
+		{
 			"key": "userAccessToken",
 			"value": "",
 			"enabled": true
@@ -16,9 +21,24 @@
 			"key": "base_url",
 			"value": "http://kong-proxy.devkong",
 			"enabled": true
+		},
+		{
+			"key": "sessionId",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "testUser",
+			"value": "",
+			"enabled": true
+		},
+		{
+			"key": "testUserPassword",
+			"value": "otp",
+			"enabled": true
 		}
 	],
 	"_postman_variable_scope": "environment",
-	"_postman_exported_at": "2020-12-22T16:22:46.030Z",
+	"_postman_exported_at": "2020-12-22T17:14:35.637Z",
 	"_postman_exported_using": "Postman/7.36.1"
 }
