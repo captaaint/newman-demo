@@ -1748,13 +1748,10 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "http://api.ftxapigw.fintechblocks.com:8000/dev/secured/api/v1/customer/1234596654/accounts",
+							"raw": "{{base_url}}/dev/secured/api/v1/customer/1234596654/accounts",
 							"protocol": "http",
 							"host": [
-								"api",
-								"ftxapigw",
-								"fintechblocks",
-								"com"
+								"{{base_url}}"
 							],
 							"port": "8000",
 							"path": [
