@@ -1,19 +1,1612 @@
 {
 	"info": {
-		"_postman_id": "88cd2af4-edea-4162-9bfb-e7424612d6f4",
-		"name": "demo-newman",
+		"_postman_id": "fea3bda5-5b84-46ff-bdcb-6b7dc0542dc5",
+		"name": "ftx-route-service-mapping with tests",
 		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
 	},
 	"item": [
 		{
-			"name": "anonymusToken",
+			"name": "Happy",
+			"item": [
+				{
+					"name": "anonymusToken",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"response should be okay to process\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"the status_code should be 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"response should contain an access_token\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('access_token');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"response should contain a refresh_token\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.refresh_token).not.to.be.null;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "noauth"
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							},
+							{
+								"key": "",
+								"value": "",
+								"type": "text",
+								"disabled": true
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"requestid\": \"{{$guid}}\",\r\n    \"transactionid\": \"{{$guid}}\"\r\n}"
+						},
+						"url": {
+							"raw": "http://kong-proxy.devkong/dev/public/api/v1/auth/anonymus/acquire/token",
+							"protocol": "http",
+							"host": [
+								"kong-proxy",
+								"devkong"
+							],
+							"path": [
+								"dev",
+								"public",
+								"api",
+								"v1",
+								"auth",
+								"anonymus",
+								"acquire",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "registration",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"response should be okay to process\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"the status_code should be 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"response should have a body with an empty object\", function () {\r",
+									"    pm.response.to.have.body({});\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.sendRequest({\r",
+									"    url: 'http://kong-proxy.devkong/dev/public/api/v1/auth/anonymus/acquire/token',\r",
+									"    method: 'POST',\r",
+									"    header: {\r",
+									"        'Content-Type': 'application/json'\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify({\r",
+									"            \"requestid\": \"{{$guid}}\",\r",
+									"            \"transactionid\": \"{{$guid}}\"\r",
+									"        })\r",
+									"    }\r",
+									"}, function (err, res) {\r",
+									"    pm.environment.set('anonymusAccessToken', res.json().access_token)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "eyJhbGciOiJSUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJmbjNIck81NHl1Z0V3Zy01X2VFbF9RQktxdGhaelZwNE91cXl1X2dzTzA0In0.eyJleHAiOjE2MDgyNzg0NDMsImlhdCI6MTYwODI3NjY0MywianRpIjoiZDBhM2FjM2MtYzk0NS00ZjhhLTg5MGMtMWM2ZGFmODQ0NzAxIiwiaXNzIjoiaHR0cHM6Ly9hdXRoLnRha2FyZWsuZ3cuaW8vYXV0aC9yZWFsbXMvdGFrYXJlay1wb2MiLCJhdWQiOiJhY2NvdW50Iiwic3ViIjoiN2U2YzY2NDgtNGI5Yy00ZjM0LWEwYWItYTRmMDY2ODBjODE0IiwidHlwIjoiQmVhcmVyIiwiYXpwIjoiYmFja2VuZF9hcHAiLCJzZXNzaW9uX3N0YXRlIjoiZTY4NTVkYzQtOTZkOC00NWE1LTgwODItZDcyMGE3N2NjNjc1IiwiYWNyIjoiMSIsInJlYWxtX2FjY2VzcyI6eyJyb2xlcyI6WyJvZmZsaW5lX2FjY2VzcyIsInVtYV9hdXRob3JpemF0aW9uIl19LCJyZXNvdXJjZV9hY2Nlc3MiOnsiYWNjb3VudCI6eyJyb2xlcyI6WyJtYW5hZ2UtYWNjb3VudCIsIm1hbmFnZS1hY2NvdW50LWxpbmtzIiwidmlldy1wcm9maWxlIl19fSwic2NvcGUiOiJwcm9maWxlIGVtYWlsIiwiY2xpZW50SG9zdCI6IjE3Mi4xOC4wLjgiLCJlbWFpbF92ZXJpZmllZCI6ZmFsc2UsImNsaWVudElkIjoiYmFja2VuZF9hcHAiLCJwcmVmZXJyZWRfdXNlcm5hbWUiOiJzZXJ2aWNlLWFjY291bnQtYmFja2VuZF9hcHAiLCJjbGllbnRBZGRyZXNzIjoiMTcyLjE4LjAuOCJ9.MD7dNJPn-srk6TRypgeXw77EgqEkwpLPRf5yRVUj3RKxpKy190IFAvem1Vg-zmhIsxX0rWwd0JSyW51rXmfAzgssZ6u-Mymmgm6EnPJv8nQKYinouDIvlAW0yq_FDWItJ1eSwr6ylQguNoKvSgNJXHD5N4xMBPc4q4VFGyB2FfkwLD6fKTYtEdhUETDK9rLAZne9oL0lWIT9C-eHXh9yNl7slsKFuYYBgByg53fvmKyTIzhYv-kPXXf_7Sjyi97jbjYTa0h7AbyX37efEFYemx96DDat4yiY7KhMvwd60pYDxcOpC67E1ZwXhBHk3PVsy2XrZ7p1-ngJUfq0CuUmtw",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": " application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"test@test.hu\",\r\n    \"password\": \"otp\",\r\n    \"mobile\": \"mobile_attribute\"\r\n}"
+						},
+						"url": {
+							"raw": "http://kong-proxy.devkong/dev/public/api/v1/auth/registration/init",
+							"protocol": "http",
+							"host": [
+								"kong-proxy",
+								"devkong"
+							],
+							"path": [
+								"dev",
+								"public",
+								"api",
+								"v1",
+								"auth",
+								"registration",
+								"init"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "emailConfirmPath",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"response should be okay to process\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"the status_code should be 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"response should have a body with an empty object\", function () {\r",
+									"    pm.response.to.have.body({});\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{anonymusAccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": " {\r\n     \"email\": \"test@test.hu\"\r\n }"
+						},
+						"url": {
+							"raw": "http://kong-proxy.devkong/dev/public/api/v1/auth/validate/email/121332",
+							"protocol": "http",
+							"host": [
+								"kong-proxy",
+								"devkong"
+							],
+							"path": [
+								"dev",
+								"public",
+								"api",
+								"v1",
+								"auth",
+								"validate",
+								"email",
+								"121332"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "smsConfirm",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"response should be okay to process\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"the status_code should be 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"response should have a body with an empty object\", function () {\r",
+									"    pm.response.to.have.body({});\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{anonymusAccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"otp\": \"SMS\"\r\n}"
+						},
+						"url": {
+							"raw": "http://kong-proxy.devkong/dev/public/api/v1/auth/registration/otp",
+							"protocol": "http",
+							"host": [
+								"kong-proxy",
+								"devkong"
+							],
+							"path": [
+								"dev",
+								"public",
+								"api",
+								"v1",
+								"auth",
+								"registration",
+								"otp"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getUserToken",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"response should be okay to process\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"the status_code should be 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "GET",
+						"header": [
+							{
+								"key": "x-client-id",
+								"value": "backend_app",
+								"type": "text"
+							},
+							{
+								"key": "SSL_CLIENT_CERT",
+								"value": "test_cert",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://kong-proxy.devkong/dev/public/api/v1/auth/user/token",
+							"protocol": "http",
+							"host": [
+								"kong-proxy",
+								"devkong"
+							],
+							"path": [
+								"dev",
+								"public",
+								"api",
+								"v1",
+								"auth",
+								"user",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "postUserToken-loginWithEmailAndPassword",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"response should be okay to process\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"the status_code should be 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"response body should have access_token property\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('access_token');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"access_token should not to be null\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.access_token).not.to.be.null;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"response body should have refresh_token property\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('refresh_token');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"refresh_token should not to be null\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.refresh_token).not.to.be.null;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"response body should have id_token property\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('id_token');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"id_token should not to be null\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.id_token).not.to.be.null;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{anonymusAccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"test@test.hu\",\r\n    \"password\": \"otp\"\r\n}"
+						},
+						"url": {
+							"raw": "http://kong-proxy.devkong/dev/secured/api/v1/auth/user/token",
+							"protocol": "http",
+							"host": [
+								"kong-proxy",
+								"devkong"
+							],
+							"path": [
+								"dev",
+								"secured",
+								"api",
+								"v1",
+								"auth",
+								"user",
+								"token"
+							],
+							"query": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "postUserToken-refreshToken",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"response should be okay to process\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"the status_code should be 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"response body should have access_token property\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('access_token');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"access_token should not to be null\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.access_token).not.to.be.null;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"response body should have refresh_token property\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('refresh_token');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"refresh_token should not to be null\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData.refresh_token).not.to.be.null;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{anonymusAccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"refresh_token\": \"eyJhbGciOiJIUzI1NiIsInR5cCIgOiAiSldUIiwia2lkIiA6ICJmNjc3M2UwOS1mZTBiLTQzY2MtOTBiZC1hODg1MjNlMGM4ZGQifQ.eyJleHAiOjE2MDgyNzg5MTgsImlhdCI6MTYwODI3NzExOCwianRpIjoiYzEzMTJiMmUtYzE1OC00YmFiLWE1NTQtNDFhYmNmYzZkMTJkIiwiaXNzIjoiaHR0cHM6Ly9hdXRoLnRha2FyZWsuZ3cuaW8vYXV0aC9yZWFsbXMvdGFrYXJlay1wb2MiLCJhdWQiOiJodHRwczovL2F1dGgudGFrYXJlay5ndy5pby9hdXRoL3JlYWxtcy90YWthcmVrLXBvYyIsInN1YiI6IjdlNmM2NjQ4LTRiOWMtNGYzNC1hMGFiLWE0ZjA2NjgwYzgxNCIsInR5cCI6IlJlZnJlc2giLCJhenAiOiJiYWNrZW5kX2FwcCIsInNlc3Npb25fc3RhdGUiOiI3ZmUzMzE3Yi1kM2Q3LTQ1NzQtOTgxNy0yZjYzMDFhNTUyN2EiLCJzY29wZSI6InByb2ZpbGUgZW1haWwifQ.zJy3Pp39GPw052hoS7OIZFl61aeWQOM1MjvFw7UafNs\"\r\n}"
+						},
+						"url": {
+							"raw": "http://kong-proxy.devkong/dev/secured/api/v1/auth/user/token",
+							"protocol": "http",
+							"host": [
+								"kong-proxy",
+								"devkong"
+							],
+							"path": [
+								"dev",
+								"secured",
+								"api",
+								"v1",
+								"auth",
+								"user",
+								"token"
+							],
+							"query": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "user/sign/cert",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"response should be okay to process\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"the status_code should be 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"response body should have signedCert property\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('signedCert');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"response body should have serialNumber property\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('serialNumber');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.sendRequest({\r",
+									"    url: 'http://kong-proxy.devkong/dev/secured/api/v1/auth/user/token',\r",
+									"    method: 'POST',\r",
+									"    header: {\r",
+									"        'Content-Type': 'application/json'\r",
+									"    },\r",
+									"    body: {\r",
+									"        mode: 'raw',\r",
+									"        raw: JSON.stringify({\r",
+									"            \"email\": \"test@test.hu\",\r",
+									"            \"password\": \"otp\"\r",
+									"        })\r",
+									"    }\r",
+									"}, function (err, res) {\r",
+									"    pm.environment.set('userAccessToken', res.json().access_token)\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{userAccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							},
+							{
+								"key": "",
+								"value": "",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"uniqueid\": \"{{$guid}}\",\r\n    \"csr\": \"csr_attribute\"\r\n}"
+						},
+						"url": {
+							"raw": "http://kong-proxy.devkong/dev/public/api/v1/auth/user/sign/cert",
+							"protocol": "http",
+							"host": [
+								"kong-proxy",
+								"devkong"
+							],
+							"path": [
+								"dev",
+								"public",
+								"api",
+								"v1",
+								"auth",
+								"user",
+								"sign",
+								"cert"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "successSignedCert",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"response should be okay to process\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"the status_code should be 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"response should have a body with an empty object\", function () {\r",
+									"    pm.response.to.have.body({});\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{userAccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"url": {
+							"raw": "http://kong-proxy.devkong/dev/secured/api/v1/auth/user/sign/cert/success",
+							"protocol": "http",
+							"host": [
+								"kong-proxy",
+								"devkong"
+							],
+							"path": [
+								"dev",
+								"secured",
+								"api",
+								"v1",
+								"auth",
+								"user",
+								"sign",
+								"cert",
+								"success"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "renewCert",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"response should be okay to process\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"the status_code should be 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"response body should have signedCert property\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('signedCert');\r",
+									"});\r",
+									"\r",
+									"pm.test(\"response body should have serialNumber property\", function () {\r",
+									"    const jsonData = pm.response.json();\r",
+									"    pm.expect(jsonData).to.have.property('serialNumber');\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{userAccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"csr\": \"csr_attribute\",\r\n\"uniqueid\": \"{{$guid}}\",\r\n\"serialNumber\": \"1 (0x1)\"\r\n}"
+						},
+						"url": {
+							"raw": "http://kong-proxy.devkong/dev/secured/api/v1/auth/user/renew/cert",
+							"protocol": "http",
+							"host": [
+								"kong-proxy",
+								"devkong"
+							],
+							"path": [
+								"dev",
+								"secured",
+								"api",
+								"v1",
+								"auth",
+								"user",
+								"renew",
+								"cert"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "successRenewedCert",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"response should be okay to process\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"the status_code should be 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"response should have a body with an empty object\", function () {\r",
+									"    pm.response.to.have.body({});\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{userAccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"expiredate\": \"1607350427\",\r\n\"serialnumber\": \"1 (0x1)\"\r\n}"
+						},
+						"url": {
+							"raw": "http://kong-proxy.devkong/dev/secured/api/v1/auth/user/renew/cert/success",
+							"protocol": "http",
+							"host": [
+								"kong-proxy",
+								"devkong"
+							],
+							"path": [
+								"dev",
+								"secured",
+								"api",
+								"v1",
+								"auth",
+								"user",
+								"renew",
+								"cert",
+								"success"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "otpLogin",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"response should be okay to process\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"the status_code should be 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"response should contain an access_token\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.access_token).not.to.be.null;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"response should contain a refresh_token\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.refresh_token).not.to.be.null;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"response should contain a id_token\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.id_token).not.to.be.null;\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{anonymusAccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"otp\":\"otp\",\r\n\"email\":\"test@test.hu\",\r\n\"sessionid\": \"{{$guid}}\"\r\n}\r\n"
+						},
+						"url": {
+							"raw": "http://kong-proxy.devkong/dev/public/api/v1/auth/user/login/otp",
+							"protocol": "http",
+							"host": [
+								"kong-proxy",
+								"devkong"
+							],
+							"path": [
+								"dev",
+								"public",
+								"api",
+								"v1",
+								"auth",
+								"user",
+								"login",
+								"otp"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "registration-userWithSessionId",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"response should be okay to process\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"the status_code should be 201\", function () {\r",
+									"    pm.response.to.have.status(201);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"response should have a body with an empty object\", function () {\r",
+									"    pm.response.to.have.body({});\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{anonymusAccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": " application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"email\": \"session@email.com\",\r\n    \"password\": \"session\",\r\n    \"mobile\": \"mobile_attribute\"\r\n}"
+						},
+						"url": {
+							"raw": "http://kong-proxy.devkong/dev/public/api/v1/auth/registration/init",
+							"protocol": "http",
+							"host": [
+								"kong-proxy",
+								"devkong"
+							],
+							"path": [
+								"dev",
+								"public",
+								"api",
+								"v1",
+								"auth",
+								"registration",
+								"init"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "postUserToken-loginUserWithSessionID",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"response should be okay to process\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"the status_code should be 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"response should contain an session_id\", function () {\r",
+									"    const responseJson = pm.response.json();\r",
+									"    pm.expect(responseJson.session_id).not.to.be.null;\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{anonymusAccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"type": "text",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n\"email\": \"session@email.com\",\r\n\"password\": \"session\"\r\n}"
+						},
+						"url": {
+							"raw": "http://kong-proxy.devkong/dev/public/api/v1/auth/user/token",
+							"protocol": "http",
+							"host": [
+								"kong-proxy",
+								"devkong"
+							],
+							"path": [
+								"dev",
+								"public",
+								"api",
+								"v1",
+								"auth",
+								"user",
+								"token"
+							],
+							"query": [
+								{
+									"key": "Content-Type",
+									"value": "application/json",
+									"disabled": true
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "userLock",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"response should be okay to process\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"the status_code should be 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"response should have a body with an empty object\", function () {\r",
+									"    pm.response.to.have.body({});\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{userAccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"sessionid\": \"96516b16-3f81-4117-a1aa-8cfe14a5c933\"\r\n}"
+						},
+						"url": {
+							"raw": "http://kong-proxy.devkong/dev/secured/api/v1/auth/user/lock",
+							"protocol": "http",
+							"host": [
+								"kong-proxy",
+								"devkong"
+							],
+							"path": [
+								"dev",
+								"secured",
+								"api",
+								"v1",
+								"auth",
+								"user",
+								"lock"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "userWipe",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"response should be okay to process\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"the status_code should be 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"response should have a body with an empty object\", function () {\r",
+									"    pm.response.to.have.body({\"notes\": \"Revoked x509 successfully\"});\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{userAccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"sessionid\": \"fde38246-1cde-4c23-82fc-e1106498ed2f\"\r\n}"
+						},
+						"url": {
+							"raw": "http://kong-proxy.devkong/dev/secured/api/v1/auth/user/wipe",
+							"protocol": "http",
+							"host": [
+								"kong-proxy",
+								"devkong"
+							],
+							"path": [
+								"dev",
+								"secured",
+								"api",
+								"v1",
+								"auth",
+								"user",
+								"wipe"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "uploadKycDetails",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"response should be okay to process\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"the status_code should be 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"response should have a body with an empty object\", function () {\r",
+									"    pm.response.to.have.body({});\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{userAccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"regID\": \"12121\",\r\n    \"address\": \"fake address\"\r\n}"
+						},
+						"url": {
+							"raw": "http://kong-proxy.devkong/dev/secured/api/v1/auth/kyc/uploadUserDetails",
+							"protocol": "http",
+							"host": [
+								"kong-proxy",
+								"devkong"
+							],
+							"path": [
+								"dev",
+								"secured",
+								"api",
+								"v1",
+								"auth",
+								"kyc",
+								"uploadUserDetails"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "uploadKycPhotos",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"response should be okay to process\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"the status_code should be 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"response should have a body with an empty object\", function () {\r",
+									"    pm.response.to.have.body({});\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{userAccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "multipart/form-data",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "formdata",
+							"formdata": [
+								{
+									"key": "idcard",
+									"type": "file",
+									"src": "/C:/Users/Developer/Work/fintechX-api-gateway/helpers/postmanphotos/IdCard.JPG"
+								},
+								{
+									"key": "selfiephoto",
+									"type": "file",
+									"src": "/C:/Users/Developer/Work/fintechX-api-gateway/helpers/postmanphotos/Selfie.JPG"
+								},
+								{
+									"key": "addresscard",
+									"type": "file",
+									"src": "/C:/Users/Developer/Work/fintechX-api-gateway/helpers/postmanphotos/AddressCard.JPG"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://kong-proxy.devkong/dev/secured/api/v1/auth/kyc/uploadPhotos",
+							"protocol": "http",
+							"host": [
+								"kong-proxy",
+								"devkong"
+							],
+							"path": [
+								"dev",
+								"secured",
+								"api",
+								"v1",
+								"auth",
+								"kyc",
+								"uploadPhotos"
+							]
+						},
+						"description": "példa fotókat tettem fel ide: https://drive.google.com/drive/u/0/folders/11-YxflJQlB6Il8EM4Aucnj1C9gRmO4J9"
+					},
+					"response": []
+				},
+				{
+					"name": "customerCards",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"response should be okay to process\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"the status_code should be 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"response should have a body with an empty object\", function () {\r",
+									"    pm.response.to.have.body({});\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{userAccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://kong-proxy.devkong/dev/secured/api/v1/customer/1234596654/cards",
+							"protocol": "http",
+							"host": [
+								"kong-proxy",
+								"devkong"
+							],
+							"path": [
+								"dev",
+								"secured",
+								"api",
+								"v1",
+								"customer",
+								"1234596654",
+								"cards"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "accountDetails",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"response should be okay to process\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"the status_code should be 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"response should have a body with an empty object\", function () {\r",
+									"    pm.response.to.have.body({});\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{userAccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json",
+								"type": "text"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"accountids\": [\"12345\", \"2332423\"]\r\n}"
+						},
+						"url": {
+							"raw": "http://kong-proxy.devkong/dev/secured/api/v1/accounts/details",
+							"protocol": "http",
+							"host": [
+								"kong-proxy",
+								"devkong"
+							],
+							"path": [
+								"dev",
+								"secured",
+								"api",
+								"v1",
+								"accounts",
+								"details"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "getCardById",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"response should be okay to process\", function () {\r",
+									"    pm.response.to.not.be.error;\r",
+									"    pm.response.to.be.withBody;\r",
+									"    pm.response.to.be.json;\r",
+									"});\r",
+									"\r",
+									"pm.test(\"the status_code should be 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"response should have a body with an empty object\", function () {\r",
+									"    pm.response.to.have.body({});\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "{{userAccessToken}}",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "http://kong-proxy.devkong/dev/secured/api/v1/card/1234596654",
+							"protocol": "http",
+							"host": [
+								"kong-proxy",
+								"devkong"
+							],
+							"path": [
+								"dev",
+								"secured",
+								"api",
+								"v1",
+								"card",
+								"1234596654"
+							]
+						},
+						"description": "http://api.ftxapigw.fintechblocks.com:8000/mock/secured/api/v1/card/1234596654"
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "anonymusToken - correlation-id in response",
 			"event": [
 				{
 					"listen": "test",
 					"script": {
 						"exec": [
-							"const jsonData = pm.response.json();\r",
-							"console.log(jsonData);"
+							"pm.test(\"response should be okay to process\", function () {\r",
+							"    pm.response.to.not.be.error;\r",
+							"    pm.response.to.be.withBody;\r",
+							"    pm.response.to.be.json;\r",
+							"});\r",
+							"\r",
+							"pm.test(\"the status_code should be 200\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"x-correlation-id header is present\", () => {\r",
+							"  pm.response.to.have.header(\"x-correlation-id\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"\r",
+							""
 						],
 						"type": "text/javascript"
 					}
@@ -27,20 +1620,8 @@
 				"header": [
 					{
 						"key": "Content-Type",
-						"value": "application/json",
-						"type": "text"
-					},
-					{
-						"key": "",
-						"value": "",
 						"type": "text",
-						"disabled": true
-					},
-					{
-						"key": "",
-						"value": "",
-						"type": "text",
-						"disabled": true
+						"value": "application/json"
 					}
 				],
 				"body": {
@@ -67,6 +1648,26 @@
 				}
 			},
 			"response": []
+		}
+	],
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
 		}
 	]
 }
