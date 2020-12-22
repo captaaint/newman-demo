@@ -1473,7 +1473,7 @@
 								{
 									"key": "addresscard",
 									"type": "file",
-									"src": "AddressCard.jpg"
+									"src": "./AddressCard.jpg"
 								}
 							]
 						},
