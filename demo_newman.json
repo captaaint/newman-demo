@@ -1749,7 +1749,6 @@
 						"header": [],
 						"url": {
 							"raw": "{{base_url}}/dev/secured/api/v1/customer/1234596654/accounts",
-							"protocol": "http",
 							"host": [
 								"{{base_url}}"
 							],
